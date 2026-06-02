@@ -70,7 +70,7 @@ export function ActiveFilterTags({
 
         return (
           <div key={`matchday-${value}`} className={styles.tag}>
-            <span>Matchday: {label}</span>
+            <span>{label}</span>
 
             <button
               type="button"

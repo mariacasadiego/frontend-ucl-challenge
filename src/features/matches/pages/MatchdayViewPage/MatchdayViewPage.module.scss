@@ -8,60 +8,31 @@
 
 .header {
   h2 {
-    font-size: 2rem;
-    font-weight: 800;
+    font-size: 2.5rem;
+    font-weight: 900;
     color: $text-color;
   }
 
   p {
     margin-top: 0.35rem;
     color: $text-secondary;
+    font-size: 1.05rem;
   }
 }
 
-.days {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+.selector {
+  width: 100%;
+  max-width: 460px;
+}
 
-  button {
-    height: 42px;
-    padding: 0 1rem;
-    border: 1px solid $border-color;
-    border-radius: $radius-md;
-    background: white;
-    font-weight: 800;
-    color: $text-secondary;
-
-    &:hover {
-      background: $primary-light;
-      color: $primary-dark;
+@media (max-width: 768px) {
+  .header {
+    h2 {
+      font-size: 2rem;
     }
   }
 
-  .active {
-    background: $primary-color;
-    border-color: $primary-color;
-    color: white;
-  }
-}
-
-.summary {
-  width: fit-content;
-  padding: 1rem 1.25rem;
-  background: $surface-color;
-  border: 1px solid $border-color;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-sm;
-
-  strong {
-    display: block;
-    font-size: 1.75rem;
-    color: $primary-color;
-  }
-
-  span {
-    color: $text-secondary;
-    font-weight: 700;
+  .selector {
+    max-width: 100%;
   }
 }
