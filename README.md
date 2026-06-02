@@ -157,6 +157,23 @@ The application includes:
 
 ---
 
+## Testing
+
+Frontend component tests were implemented using Vitest and React Testing Library.
+
+Covered scenarios:
+
+- Fixture rendering
+- Pagination interaction
+- Active filter removal
+- Empty state rendering
+
+Run tests:
+
+```bash
+npm run test:run
+```
+
 ## Author
 
 Maria Fernanda Casadiego
