@@ -45,62 +45,82 @@ export function ActiveFilterTags({
   if (!hasFilters) return null;
 
   return (
-    <div className={styles.tags}>
-      {selectedTeams.map((value) => (
-        <div key={`team-${value}`} className={styles.tag}>
-          <span>Team: {getLabel(teamsOptions, value)}</span>
+    <div className={styles.tags} aria-label="Active filters">
+      {selectedTeams.map((value) => {
+        const label = getLabel(teamsOptions, value);
 
-          <button
-            type="button"
-            className={styles.remove}
-            onClick={() => onRemoveTeam(value)}
-          >
-            ×
-          </button>
-        </div>
-      ))}
+        return (
+          <div key={`team-${value}`} className={styles.tag}>
+            <span>Team: {label}</span>
 
-      {selectedMatchDays.map((value) => (
-        <div key={`matchday-${value}`} className={styles.tag}>
-          <span>Matchday: {getLabel(matchDaysOptions, value)}</span>
+            <button
+              type="button"
+              className={styles.remove}
+              aria-label={`Remove ${label} filter`}
+              onClick={() => onRemoveTeam(value)}
+            >
+              ×
+            </button>
+          </div>
+        );
+      })}
 
-          <button
-            type="button"
-            className={styles.remove}
-            onClick={() => onRemoveMatchDay(value)}
-          >
-            ×
-          </button>
-        </div>
-      ))}
+      {selectedMatchDays.map((value) => {
+        const label = getLabel(matchDaysOptions, value);
 
-      {selectedCountries.map((value) => (
-        <div key={`country-${value}`} className={styles.tag}>
-          <span>Country: {getLabel(countriesOptions, value)}</span>
+        return (
+          <div key={`matchday-${value}`} className={styles.tag}>
+            <span>Matchday: {label}</span>
 
-          <button
-            type="button"
-            className={styles.remove}
-            onClick={() => onRemoveCountry(value)}
-          >
-            ×
-          </button>
-        </div>
-      ))}
+            <button
+              type="button"
+              className={styles.remove}
+              aria-label={`Remove ${label} filter`}
+              onClick={() => onRemoveMatchDay(value)}
+            >
+              ×
+            </button>
+          </div>
+        );
+      })}
 
-      {selectedVenues.map((value) => (
-        <div key={`venue-${value}`} className={styles.tag}>
-          <span>Venue: {getLabel(venueOptions, value)}</span>
+      {selectedCountries.map((value) => {
+        const label = getLabel(countriesOptions, value);
 
-          <button
-            type="button"
-            className={styles.remove}
-            onClick={() => onRemoveVenue(value)}
-          >
-            ×
-          </button>
-        </div>
-      ))}
+        return (
+          <div key={`country-${value}`} className={styles.tag}>
+            <span>Country: {label}</span>
+
+            <button
+              type="button"
+              className={styles.remove}
+              aria-label={`Remove ${label} filter`}
+              onClick={() => onRemoveCountry(value)}
+            >
+              ×
+            </button>
+          </div>
+        );
+      })}
+
+      {selectedVenues.map((value) => {
+        const label = getLabel(venueOptions, value);
+
+        return (
+          <div key={`venue-${value}`} className={styles.tag}>
+            <span>Venue: {label}</span>
+
+            <button
+              type="button"
+              className={styles.remove}
+              aria-label={`Remove ${label} filter`}
+              onClick={() => onRemoveVenue(value)}
+            >
+              ×
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }

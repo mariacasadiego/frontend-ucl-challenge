@@ -1,40 +1,50 @@
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useMemo, useState } from "react";
 import styles from "./MatchesPage.module.scss";
 
 import { useMatches } from "../../hooks/useMatches";
 
 import { MatchTable } from "../../components/MatchTable";
 import { MatchFilters } from "../../components/MatchFilters";
-import { ActiveFilterTags } from "../../components/ActiveFilterTags";
 import { Pagination } from "../../components/Pagination";
+import { ActiveFilterTags } from "../../components/ActiveFilterTags";
 
 import { LoadingState } from "../../../../shared/components/LoadingState";
 import { ErrorState } from "../../../../shared/components/ErrorState";
 import { EmptyState } from "../../../../shared/components/EmptyState";
 
 export function MatchesPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
-  const [selectedMatchDays, setSelectedMatchDays] = useState<string[]>(() => {
-    const matchdayParam = searchParams.get("matchday");
-    return matchdayParam ? matchdayParam.split(",").filter(Boolean) : [];
-  });
+  const [selectedMatchDays, setSelectedMatchDays] = useState<string[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedVenues, setSelectedVenues] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState(() => {
-    const rawPage = Number(searchParams.get("page") ?? "1");
-    return Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
-  });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 12;
 
-  const { data, isLoading, isError } = useMatches({
+  const {
+    data: firstPageData,
+    isLoading: isLoadingFirstPage,
+    isError: isErrorFirstPage,
+  } = useMatches({
     page: 1,
     limit: 100,
   });
 
-  const matches = data?.matches ?? [];
+  const {
+    data: secondPageData,
+    isLoading: isLoadingSecondPage,
+    isError: isErrorSecondPage,
+  } = useMatches({
+    page: 2,
+    limit: 100,
+  });
+
+  const matches = useMemo(() => {
+    return [
+      ...(firstPageData?.matches ?? []),
+      ...(secondPageData?.matches ?? []),
+    ];
+  }, [firstPageData?.matches, secondPageData?.matches]);
 
   const teamsOptions = useMemo(() => {
     const teams = new Map<string, { label: string; value: string }>();
@@ -52,7 +62,7 @@ export function MatchesPage() {
     });
 
     return Array.from(teams.values()).sort((a, b) =>
-      a.label.localeCompare(b.label),
+      a.label.localeCompare(b.label)
     );
   }, [matches]);
 
@@ -72,7 +82,7 @@ export function MatchesPage() {
     });
 
     return Array.from(countries.values()).sort((a, b) =>
-      a.label.localeCompare(b.label),
+      a.label.localeCompare(b.label)
     );
   }, [matches]);
 
@@ -82,7 +92,7 @@ export function MatchesPage() {
         label: `Matchday ${index + 1}`,
         value: String(index + 1),
       })),
-    [],
+    []
   );
 
   const venueOptions = useMemo(
@@ -90,31 +100,8 @@ export function MatchesPage() {
       { label: "Home", value: "home" },
       { label: "Away", value: "away" },
     ],
-    [],
+    []
   );
-
-  useEffect(() => {
-    const matchdayParam = searchParams.get("matchday");
-    const valuesFromQuery = matchdayParam
-      ? matchdayParam.split(",").filter(Boolean)
-      : [];
-    const rawPage = Number(searchParams.get("page") ?? "1");
-    const pageFromQuery =
-      Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
-
-    setSelectedMatchDays((currentValues) => {
-      const isSameLength = currentValues.length === valuesFromQuery.length;
-      const hasSameValues =
-        isSameLength &&
-        currentValues.every((value, index) => value === valuesFromQuery[index]);
-
-      return hasSameValues ? currentValues : valuesFromQuery;
-    });
-
-    setCurrentPage((current) =>
-      current === pageFromQuery ? current : pageFromQuery,
-    );
-  }, [searchParams]);
 
   const filteredMatches = useMemo(() => {
     return matches.filter((match) => {
@@ -149,12 +136,12 @@ export function MatchesPage() {
 
         const selectedTeamSet = new Set(selectedTeams);
 
-        const isSelectedTeamHome = selectedTeamSet.has(homeTeamId);
-        const isSelectedTeamAway = selectedTeamSet.has(awayTeamId);
+        const selectedTeamIsHome = selectedTeamSet.has(homeTeamId);
+        const selectedTeamIsAway = selectedTeamSet.has(awayTeamId);
 
         return (
-          (selectedVenues.includes("home") && isSelectedTeamHome) ||
-          (selectedVenues.includes("away") && isSelectedTeamAway)
+          (selectedVenues.includes("home") && selectedTeamIsHome) ||
+          (selectedVenues.includes("away") && selectedTeamIsAway)
         );
       })();
 
@@ -177,33 +164,8 @@ export function MatchesPage() {
     return filteredMatches.slice(start, end);
   }, [filteredMatches, currentPage]);
 
-  const updateSearchParams = ({
-    page,
-    matchday,
-  }: {
-    page?: string | null;
-    matchday?: string | null;
-  }) => {
-    const nextParams = new URLSearchParams(searchParams);
-
-    if (page !== undefined) {
-      if (page) nextParams.set("page", page);
-      else nextParams.delete("page");
-    }
-
-    if (matchday !== undefined) {
-      if (matchday) nextParams.set("matchday", matchday);
-      else nextParams.delete("matchday");
-    }
-
-    if (nextParams.toString() !== searchParams.toString()) {
-      setSearchParams(nextParams);
-    }
-  };
-
   const resetPage = () => {
     setCurrentPage(1);
-    updateSearchParams({ page: "1" });
   };
 
   const handleTeamsChange = (values: string[]) => {
@@ -213,7 +175,6 @@ export function MatchesPage() {
 
   const handleMatchDaysChange = (values: string[]) => {
     setSelectedMatchDays(values);
-    updateSearchParams({ matchday: values.length ? values.join(",") : null });
     resetPage();
   };
 
@@ -227,41 +188,19 @@ export function MatchesPage() {
     resetPage();
   };
 
-  const handleRemoveTeam = (value: string) => {
-    handleTeamsChange(selectedTeams.filter((item) => item !== value));
-  };
-
-  const handleRemoveMatchDay = (value: string) => {
-    handleMatchDaysChange(selectedMatchDays.filter((item) => item !== value));
-  };
-
-  const handleRemoveCountry = (value: string) => {
-    handleCountriesChange(selectedCountries.filter((item) => item !== value));
-  };
-
-  const handleRemoveVenue = (value: string) => {
-    handleVenuesChange(selectedVenues.filter((item) => item !== value));
-  };
-
   const handleClearFilters = () => {
     setSelectedTeams([]);
     setSelectedMatchDays([]);
     setSelectedCountries([]);
     setSelectedVenues([]);
-    updateSearchParams({ matchday: null, page: "1" });
     resetPage();
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    updateSearchParams({ page: String(page) });
-  };
-
-  if (isLoading) {
+  if (isLoadingFirstPage || isLoadingSecondPage) {
     return <LoadingState />;
   }
 
-  if (isError) {
+  if (isErrorFirstPage || isErrorSecondPage) {
     return <ErrorState />;
   }
 
@@ -294,10 +233,30 @@ export function MatchesPage() {
         matchDaysOptions={matchDaysOptions}
         countriesOptions={countriesOptions}
         venueOptions={venueOptions}
-        onRemoveTeam={handleRemoveTeam}
-        onRemoveMatchDay={handleRemoveMatchDay}
-        onRemoveCountry={handleRemoveCountry}
-        onRemoveVenue={handleRemoveVenue}
+        onRemoveTeam={(value) => {
+          setSelectedTeams((current) =>
+            current.filter((item) => item !== value)
+          );
+          resetPage();
+        }}
+        onRemoveMatchDay={(value) => {
+          setSelectedMatchDays((current) =>
+            current.filter((item) => item !== value)
+          );
+          resetPage();
+        }}
+        onRemoveCountry={(value) => {
+          setSelectedCountries((current) =>
+            current.filter((item) => item !== value)
+          );
+          resetPage();
+        }}
+        onRemoveVenue={(value) => {
+          setSelectedVenues((current) =>
+            current.filter((item) => item !== value)
+          );
+          resetPage();
+        }}
       />
 
       {!paginatedMatches.length ? (
@@ -311,7 +270,7 @@ export function MatchesPage() {
             totalPages={totalPages}
             totalItems={filteredMatches.length}
             itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
+            onPageChange={setCurrentPage}
           />
         </>
       )}

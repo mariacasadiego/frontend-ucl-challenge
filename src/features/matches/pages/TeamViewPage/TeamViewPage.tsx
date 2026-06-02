@@ -97,9 +97,9 @@ export function TeamViewPage() {
     }
   };
 
-  const handleRemoveMatchDay = (_value: string) => {};
-  const handleRemoveCountry = (_value: string) => {};
-  const handleRemoveVenue = (_value: string) => {};
+  const handleRemoveMatchDay = (_value: string) => { };
+  const handleRemoveCountry = (_value: string) => { };
+  const handleRemoveVenue = (_value: string) => { };
 
   if (isLoadingAllMatches || isLoadingTeamMatches) {
     return <LoadingState />;
@@ -126,6 +126,7 @@ export function TeamViewPage() {
           onToggle={(id) =>
             setOpenFilter((current) => (current === id ? null : id))
           }
+          onClose={() => setOpenFilter(null)}
           onChange={handleTeamChange}
         />
       </div>
