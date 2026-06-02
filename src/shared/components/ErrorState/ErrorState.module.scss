@@ -1,0 +1,26 @@
+@use "../../styles/variables" as *;
+
+.container {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 1rem;
+}
+
+.icon {
+  font-size: 3rem;
+}
+
+h3 {
+  color: red;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+p {
+  color: $text-secondary;
+}

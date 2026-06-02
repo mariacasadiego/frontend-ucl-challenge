@@ -1,0 +1,117 @@
+@use "../../../../shared/styles/variables" as *;
+
+.container {
+  width: 100%;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: $surface-color;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+.table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  th,
+  td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid $border-color;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  th {
+    background: $primary-light;
+    color: $primary-dark;
+    font-weight: 900;
+  }
+
+  th:first-child,
+  td:first-child {
+    width: 120px;
+    padding-right: 1.5rem;
+  }
+
+  tr:hover td {
+    background: #fafafa;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.cardList {
+  display: none;
+}
+
+.card {
+  padding: 1rem;
+  background: $surface-color;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+.matchday {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: $primary-light;
+  color: $primary-dark;
+  font-weight: 900;
+  font-size: 0.8rem;
+}
+
+.teams {
+  display: grid;
+  gap: 1rem;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  strong {
+    color: $text-color;
+    font-size: 1rem;
+  }
+
+  p {
+    color: $text-secondary;
+    font-weight: 700;
+  }
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: $primary-color;
+  font-weight: 900;
+}
+
+.vs {
+  color: $primary-color;
+  font-weight: 900;
+}
+
+@media (max-width: 768px) {
+  .tableWrapper {
+    display: none;
+  }
+
+  .cardList {
+    display: grid;
+    gap: 1rem;
+  }
+}

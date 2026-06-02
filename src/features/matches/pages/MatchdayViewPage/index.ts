@@ -1,0 +1,1 @@
+export { MatchdayViewPage } from "./MatchdayViewPage";

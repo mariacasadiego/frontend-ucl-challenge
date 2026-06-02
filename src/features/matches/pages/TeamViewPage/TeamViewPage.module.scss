@@ -1,0 +1,85 @@
+@use "../../../../shared/styles/variables" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: $text-color;
+  }
+
+  p {
+    margin-top: 0.35rem;
+    color: $text-secondary;
+    font-size: 1.05rem;
+  }
+}
+
+.select {
+  max-width: 460px;
+  height: 56px;
+  padding: 0 1rem;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  background: white;
+  color: $text-color;
+  font-size: 1rem;
+  font-weight: 700;
+  outline: none;
+  box-shadow: $shadow-sm;
+
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba(109, 55, 213, 0.16);
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 220px));
+  gap: 1rem;
+}
+
+.statCard {
+  padding: 1.25rem;
+  background: $surface-color;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+
+  strong {
+    display: block;
+    font-size: 2rem;
+    color: $primary-color;
+    line-height: 1;
+  }
+
+  span {
+    display: block;
+    margin-top: 0.35rem;
+    color: $text-secondary;
+    font-weight: 800;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    h2 {
+      font-size: 2rem;
+    }
+  }
+
+  .selector {
+    width: 100%;
+    max-width: 460px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}

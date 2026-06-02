@@ -1,0 +1,67 @@
+@use "../../../../shared/styles/variables" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: $text-color;
+  }
+
+  p {
+    margin-top: 0.35rem;
+    color: $text-secondary;
+  }
+}
+
+.days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  button {
+    height: 42px;
+    padding: 0 1rem;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    background: white;
+    font-weight: 800;
+    color: $text-secondary;
+
+    &:hover {
+      background: $primary-light;
+      color: $primary-dark;
+    }
+  }
+
+  .active {
+    background: $primary-color;
+    border-color: $primary-color;
+    color: white;
+  }
+}
+
+.summary {
+  width: fit-content;
+  padding: 1rem 1.25rem;
+  background: $surface-color;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+
+  strong {
+    display: block;
+    font-size: 1.75rem;
+    color: $primary-color;
+  }
+
+  span {
+    color: $text-secondary;
+    font-weight: 700;
+  }
+}
